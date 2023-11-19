@@ -61,18 +61,27 @@ class _ProfilePageState extends State<ProfilePage> {
                                     return;
                                   } else {
                                     File file = File(image.path);
-                                    authMethods.updateProPic(file);
-                                    // fare check prima
+                                    bool updatePicResult =
+                                        await authMethods.updateProPic(file);
+
                                     if (context.mounted) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(Utils.createSnackbar(
-                                              'Profile picture succesfully updated!'));
+                                      if (updatePicResult) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(Utils.createSnackbar(
+                                                'Profile picture succesfully updated!'));
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(Utils.createSnackbar(
+                                                'An error has occurred.'));
+                                      }
                                     }
                                   }
                                 },
                                 icon: const Icon(Icons.edit)),
                           ),
-                          const SizedBox(height: 35),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.08),
                           Row(
                             children: [
                               Expanded(
@@ -83,35 +92,53 @@ class _ProfilePageState extends State<ProfilePage> {
                                     maxLength: 20),
                               ),
                               IconButton(
-                                  onPressed: () {
-                                    authMethods
+                                  onPressed: () async {
+                                    bool updateNickResult = await authMethods
                                         .updateNickname(nickController.text);
-                                    // fare check prima
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        Utils.createSnackbar(
-                                            'Nickname succesfully updated!'));
+
+                                    if (context.mounted) {
+                                      if (updateNickResult) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(Utils.createSnackbar(
+                                                'Nickname succesfully updated!'));
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(Utils.createSnackbar(
+                                                'An error has occurred.'));
+                                      }
+                                    }
                                   },
                                   icon: const Icon(Icons.edit))
                             ],
                           ),
-                          const SizedBox(height: 15),
+                          SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.02),
                           Row(
                             children: [
                               Expanded(
                                 child: TextField(
                                     textCapitalization:
-                                        TextCapitalization.words,
+                                        TextCapitalization.sentences,
                                     controller: descController,
                                     maxLength: 35),
                               ),
                               IconButton(
-                                  onPressed: () {
-                                    authMethods
+                                  onPressed: () async {
+                                    bool descUpdateResult = await authMethods
                                         .updateDescription(descController.text);
-                                    // fare check prima
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        Utils.createSnackbar(
-                                            'Description succesfully updated!'));
+
+                                    if (context.mounted) {
+                                      if (descUpdateResult) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(Utils.createSnackbar(
+                                                'Description succesfully updated!'));
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(Utils.createSnackbar(
+                                                'An error has occurred.'));
+                                      }
+                                    }
                                   },
                                   icon: const Icon(Icons.edit))
                             ],

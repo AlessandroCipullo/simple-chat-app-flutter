@@ -20,7 +20,6 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final textController = TextEditingController();
   final scrollController = ScrollController();
-  //final focusNode = FocusNode();
   final authMethods = AuthMethods.getInstance();
 
   void scrollDown() async {
@@ -95,17 +94,14 @@ class _ChatPageState extends State<ChatPage> {
                   children: [
                     Expanded(
                         child: TextField(
-                      //autofocus: true,
-                      //focusNode: focusNode,
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
                       controller: textController,
                       minLines: 1,
                       maxLines: 5,
-
                       decoration: const InputDecoration(
                           contentPadding: EdgeInsets.all(12),
-                          hintText: 'Invia un messaggio',
+                          hintText: 'Write a message',
                           focusedBorder: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.black, width: 1),

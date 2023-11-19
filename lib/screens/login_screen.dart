@@ -1,5 +1,5 @@
 import 'package:chat_app/services/auth_methods.dart';
-import 'package:chat_app/screens/welcome_screen.dart';
+import 'package:chat_app/screens/homepage_screen.dart';
 import 'package:chat_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -35,16 +35,33 @@ class _LoginPageState extends State<LoginPage> {
                     if (res == 'Success') {
                       ScaffoldMessenger.of(context).showSnackBar(
                           Utils.createSnackbar('Accesso riuscito'));
-                      Navigator.pushNamed(context, '/main_screen');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
                     } else {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(Utils.createSnackbar('Accesso negato'));
                     }
                   }
                 },
-                style: ElevatedButton.styleFrom(
-                    fixedSize: Size(MediaQuery.of(context).size.width * 0.6,
-                        MediaQuery.of(context).size.height * 0.1)),
+                style: ButtonStyle(
+                    elevation: const MaterialStatePropertyAll(15),
+                    shape: const MaterialStatePropertyAll(
+                        RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(35)))),
+                    backgroundColor:
+                        MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.pressed)) {
+                        return Colors.black87;
+                      }
+                      return Colors.black;
+                    }),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                    fixedSize: MaterialStatePropertyAll(Size(
+                        MediaQuery.of(context).size.width * 0.6,
+                        MediaQuery.of(context).size.height * 0.1))),
                 child: const Text('Log in with Google')),
           ),
         ));

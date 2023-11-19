@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -77,34 +78,49 @@ class AuthMethods {
         .snapshots();
   }
 
-  void updateNickname(String newNick) async {
-    // return messaggio succ/err
-    await _firestore
-        .collection('users')
-        .doc(_auth.currentUser!.uid)
-        .update({'nickname': newNick});
-  }
-
-  void updateDescription(String newDesc) async {
-    // return messaggio succ/err
-    await _firestore
-        .collection('users')
-        .doc(_auth.currentUser!.uid)
-        .update({'description': newDesc});
-  }
-
-  void updateProPic(File pic) async {
-    //String? photoUrl;
-    final storage = FirebaseStorage.instance.ref();
-    final picRed = storage.child('${_auth.currentUser!.uid}ProPic.jpg');
-
-    picRed.putFile(pic);
-    picRed.getDownloadURL().then((value) {
-      _firestore
+  Future<bool> updateNickname(String newNick) async {
+    try {
+      await _firestore
           .collection('users')
           .doc(_auth.currentUser!.uid)
-          .update({'photoUrl': value});
-    });
+          .update({'nickname': newNick});
+      return true;
+    } on FirebaseException catch (e) {
+      log(e.stackTrace.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateDescription(String newDesc) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .update({'description': newDesc});
+      return true;
+    } on FirebaseException catch (e) {
+      log(e.stackTrace.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateProPic(File pic) async {
+    try {
+      final storage = FirebaseStorage.instance.ref();
+      final picRed = storage.child('${_auth.currentUser!.uid}ProPic.jpg');
+
+      await picRed.putFile(pic);
+      picRed.getDownloadURL().then((value) {
+        _firestore
+            .collection('users')
+            .doc(_auth.currentUser!.uid)
+            .update({'photoUrl': value});
+      });
+      return true;
+    } on FirebaseException catch (e) {
+      log(e.stackTrace.toString());
+      return false;
+    }
   }
 
   Future<void> signOutUser() async {
